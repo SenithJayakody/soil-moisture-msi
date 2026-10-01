@@ -1,6 +1,8 @@
 # Deep Learning for Soil Moisture Content Estimation via Reflectance Multispectral Imaging
 
-> **Published at the 2024 International Conference on Advances in Technology and Computing (ICATC).**
+> **Publication:** 2024 International Conference on Advances in Technology and Computing (ICATC).
+>
+> **Code release:** 2026 · [Paper / DOI](https://doi.org/10.1109/ICATC64549.2024.11025290) · [MIT License](LICENSE)
 
 ## Overview
 
@@ -29,7 +31,16 @@ The multispectral imaging system uses the following wavelengths:
 
 `365, 405, 473, 530, 575, 621, 660, 735, 770, 830, 850, 890, and 940 nm`
 
-## Published Results
+## Tasks and Evaluation
+
+- Extract spectral features from dark-current-corrected multispectral soil images.
+- Estimate soil moisture content using a regression neural network.
+- Evaluate predictions on held-out test data and an independently prepared soil sample.
+- Visualize spectral signatures and intensity-versus-moisture relationships at 473, 735, 830, and 850 nm.
+
+## Key Results
+
+The publication reports the following soil moisture estimation results:
 
 | Dataset | R² | RMSE |
 |---|---:|---:|
@@ -46,7 +57,7 @@ S. Ranasinghe, S. Jayakody, M. De Silva, V. Herath, R. Godaliyadda, M. P. Ekanay
 
 *2024 International Conference on Advances in Technology and Computing (ICATC)*
 
-**DOI:** `10.1109/ICATC64549.2024.11025290`
+**DOI:** [10.1109/ICATC64549.2024.11025290](https://doi.org/10.1109/ICATC64549.2024.11025290)
 
 ## Project Timeline
 
@@ -82,8 +93,8 @@ soil-moisture-msi/
 |-- Plots/                               # Generated figures
     |-- neural_network_testing.png
     |-- neural_network_validation.png
-    |-- Spectral Signature - Validation_dataset.png
-    |-- Parabola Plot - Validation_dataset.png
+    |-- Spectral Signature - Training_dataset.png
+    |-- Parabola Plot - Training_dataset.png
 ```
 
 | Script | Purpose |
@@ -91,15 +102,26 @@ soil-moisture-msi/
 | `Make_Datafiles.py` | Subtracts the dark-current image, applies intensity correction to a 100 x 100 pixel region, and extracts 13-band features from 100 patches per capture. |
 | `Create_train_and_validation_datasets.py` | Creates datasets for cups 06 and 26, keeping rows from the first moisture content at or below 0.41 onward. |
 | `Regression_neural_network.py` | Trains a regression network, evaluates the test and independent validation sets, and saves measured-versus-predicted plots. |
-| `Spectral_signature_&_parabola_plot.py` | Groups the validation data by moisture content and saves spectral signatures and intensity-versus-moisture plots for selected wavelengths. |
+| `Spectral_signature_&_parabola_plot.py` | Groups the training data by moisture content and saves spectral signatures and intensity-versus-moisture plots for selected wavelengths. |
 
-## Requirements
+## Getting Started
+
+### 1. Environment Setup
+
+From the repository root, create and activate a virtual environment:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+On Linux or macOS, activate it with `source .venv/bin/activate`.
 
 The scripts use Python with NumPy, pandas, Matplotlib, OpenCV (`opencv-python`), scikit-learn, and Keras with a compatible backend such as TensorFlow.
 
 A tested environment or pinned dependency file is not yet provided. `Regression_neural_network.py` imports the legacy `keras.wrappers.scikit_learn.KerasRegressor` module, even though it does not use it. The chosen Keras version must provide that module, or the unused import must be removed before using an environment that does not provide it.
 
-## Data Preparation
+### 2. Data Preparation
 
 Raw images, prepared datasets, and trained model weights are not included. Supply your own captures under `Images/` using the layout above, or provide compatible CSV files under `Datafiles/` to start at a later step.
 
@@ -109,7 +131,7 @@ The moisture labels are hardcoded for cups `06` and `26`. Capture folders use `<
 
 Extracted CSV files contain the 13 wavelength columns followed by `Moisture Content`, expressed as a fraction. Prepared datasets contain feature columns `0` through `12` followed by `Target`. The regression script converts targets to percentages by multiplying them by 100; it does not apply feature normalization.
 
-## Running the Scripts
+### 3. Run the Pipeline
 
 Run these commands from the repository root after preparing the images and installing compatible dependencies:
 
@@ -122,7 +144,9 @@ python "Spectral_signature_&_parabola_plot.py"
 
 If the two extracted CSV files already exist, start with the second command. If the prepared training and validation datasets already exist, start with the third command.
 
-The plotting script currently reads `Datafiles/Validation_dataset.csv`, while the dataset creation script writes `Datafiles/validation_dataset.csv`. On a case-sensitive filesystem, change `CSV_PATH` in the plotting script to match the generated lowercase filename before running it.
+The plotting script currently reads `Datafiles/Training_dataset.csv`, while the dataset creation script writes `Datafiles/training_dataset.csv`. On a case-sensitive filesystem, change `CSV_PATH` in the plotting script to match the generated lowercase filename before running it. Its output filenames use the input CSV stem: the current setting produces `Spectral Signature - Training_dataset.png` and `Parabola Plot - Training_dataset.png`. You can select another compatible CSV by updating `CSV_PATH`.
+
+### 4. Training and Outputs
 
 The regression network has hidden layers of 128 and 64 units and a single output unit. It uses an 80/20 training/test split, reserves 20% of the training portion for validation during fitting, and trains for 150 epochs with a batch size of 16. Cup 26 supplies the independent validation dataset.
 
