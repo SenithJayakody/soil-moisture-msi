@@ -125,6 +125,8 @@ A tested environment or pinned dependency file is not yet provided. `Regression_
 
 Raw images, prepared datasets, and trained model weights are not included. Supply your own captures under `Images/` using the layout above, or provide compatible CSV files under `Datafiles/` to start at a later step.
 
+**Dataset availability:** The dataset used in this study is available from the authors upon reasonable request.
+
 Each capture needs a grayscale dark-current reference (`000nm.png`) and all 13 wavelength images. The extraction script crops rows 700-799 and columns 475-574, so images must cover that region.
 
 The moisture labels are hardcoded for cups `06` and `26`. Capture folders use `<cup>_<level>_<subsample>`, with subsamples `A`, `B`, and `C`. The script assigns labels using a counter advanced by each `A` capture and processes folders in filesystem enumeration order. Verify that this order matches the hardcoded moisture-label sequence before generating data; the numeric level in the folder name is not used to select the label.
