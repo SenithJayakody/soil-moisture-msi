@@ -6,7 +6,7 @@ import pandas as pd
 
 
 PROJECT_PATH = Path(__file__).resolve().parent
-CSV_PATH = PROJECT_PATH / "Datafiles" / "Validation_dataset.csv"
+CSV_PATH = PROJECT_PATH / "Datafiles" / "Training_dataset.csv"
 PLOTS_PATH = PROJECT_PATH / "Plots"
 
 WAVELENGTHS = [365, 405, 473, 530, 575, 621, 660, 735, 770, 830, 850, 890, 940]
