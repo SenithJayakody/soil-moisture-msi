@@ -17,8 +17,6 @@ The publication reports the following soil moisture estimation results:
 | Test data | 0.9987 | 0.5072 |
 | Independent validation | 0.9922 | 0.7517 |
 
-These values are reported in the publication; they have not been reproduced from this repository. The current training script does not set a neural-network random seed, so results may vary between runs.
-
 ## Publication
 
 **Deep Learning for Soil Moisture Content Estimation via Reflectance Multispectral Imaging**
@@ -30,6 +28,22 @@ S. Ranasinghe, S. Jayakody, M. De Silva, V. Herath, R. Godaliyadda, M. P. Ekanay
 **DOI:** [10.1109/ICATC64549.2024.11025290](https://doi.org/10.1109/ICATC64549.2024.11025290)
 
 ## Repository Structure
+
+```text
+soil-moisture-msi/
+|-- README.md
+|-- LICENSE
+|-- .gitignore
+|-- Make_Datafiles.py
+|-- Create_train_and_validation_datasets.py
+|-- Regression_neural_network.py
+|-- Spectral_signature_&_parabola_plot.py
+|-- Images/       # Multispectral image captures
+|-- Datafiles/    # Extracted features and prepared datasets
+|-- Plots/        # Generated figures
+```
+
+`Images/`, `Datafiles/`, and `Plots/` are local input/output folders and are not included in the repository.
 
 | Script | Purpose |
 |---|---|
@@ -51,9 +65,9 @@ python -m venv .venv
 
 On Linux or macOS, activate it with `source .venv/bin/activate`.
 
-The scripts use Python with NumPy, pandas, Matplotlib, OpenCV (`opencv-python`), scikit-learn, and Keras with a compatible backend such as TensorFlow.
+Dependencies: NumPy, pandas, Matplotlib, OpenCV, scikit-learn, and Keras with TensorFlow.
 
-A tested environment or pinned dependency file is not yet provided. `Regression_neural_network.py` imports the legacy `keras.wrappers.scikit_learn.KerasRegressor` module, even though it does not use it. The chosen Keras version must provide that module, or the unused import must be removed before using an environment that does not provide it.
+The training script requires the legacy Keras scikit-learn wrapper; remove its unused import if your Keras version does not provide it.
 
 ### 2. Data Availability
 
@@ -67,10 +81,10 @@ After obtaining the dataset and installing compatible dependencies, run from the
 python Make_Datafiles.py
 python Create_train_and_validation_datasets.py
 python Regression_neural_network.py
-python Spectral_signature_&_parabola_plot.py
+python "Spectral_signature_&_parabola_plot.py"
 ```
 
-Figures are saved under `Plots/`. The regression script prints evaluation metrics and does not save the trained model.
+Figures are saved under `Plots/`.
 
 On case-sensitive filesystems, update the plotting script's `CSV_PATH` to `Datafiles/training_dataset.csv` to match the generated filename.
 
